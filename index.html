@@ -1778,10 +1778,17 @@
             color: white;
         }
 
-        .project-content h3 {
-            font-size: 1.8rem;
-            color: var(--text);
-            margin-bottom: 1rem;
+        .project-card h3 {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            color: #333;
+            line-height: 1.3;
+            height: 2.6rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         .project-description {
@@ -2120,11 +2127,16 @@
         }
 
         .experience-card h3 {
-            font-size: 1.8rem;
-            color: var(--text);
-            margin-bottom: 1rem;
-            position: relative;
-            padding-bottom: 0.5rem;
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            color: #333;
+            line-height: 1.3;
+            height: 2.6rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         .experience-card h3::after {
@@ -2429,21 +2441,21 @@
         }
 
         .article-content h3 {
-            color: var(--text);
+            color: #000000;
             font-size: 1.8rem;
             margin-bottom: 1rem;
             font-weight: 600;
         }
 
         .article-meta {
-            color: var(--accent);
+            color: #666666;
             font-size: 1rem;
             margin-bottom: 1rem;
             font-weight: 500;
         }
 
         .article-excerpt {
-            color: var(--text);
+            color: #333333;
             font-size: 1.1rem;
             margin-bottom: 1.5rem;
             line-height: 1.6;
@@ -2452,31 +2464,72 @@
         .article-link {
             display: inline-flex;
             align-items: center;
-            color: var(--accent);
+            color: #000000;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
-        }
-
-        .article-link i {
-            margin-left: 0.5rem;
-            font-size: 1rem;
+            background: #FFD700;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
         }
 
         .article-link:hover {
-            color: var(--primary);
+            background: #FFC000;
+            color: #000000;
+            transform: translateY(-2px);
         }
 
         .pdf-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 2px solid #FFD700;
         }
 
         .pdf-card .article-link {
-            color: #e74c3c;
+            background: #FFD700;
+            color: #000000;
         }
 
         .pdf-card .article-link:hover {
-            color: #c0392b;
+            background: #FFC000;
+            color: #000000;
+        }
+
+        .medium-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 2px solid #FFD700;
+        }
+
+        .medium-card .article-link {
+            background: #FFD700;
+            color: #000000;
+        }
+
+        .medium-card .article-link:hover {
+            background: #FFC000;
+            color: #000000;
+        }
+
+        .article-stats span {
+            color: #666666;
+        }
+
+        .article-stats i {
+            color: #FFD700;
+        }
+
+        .claps i {
+            color: #FFD700;
+        }
+
+        .read-time i {
+            color: #666666;
+        }
+
+        .section-subtitle {
+            color: #000000;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 0.5rem;
+            display: inline-block;
         }
 
         @media (max-width: 768px) {
@@ -2510,21 +2563,21 @@
         }
 
         .article-content h3 {
-            color: var(--text);
+            color: #000000;
             font-size: 1.8rem;
             margin-bottom: 1rem;
             font-weight: 600;
         }
 
         .article-meta {
-            color: var(--accent);
+            color: #666666;
             font-size: 1rem;
             margin-bottom: 1rem;
             font-weight: 500;
         }
 
         .article-excerpt {
-            color: var(--text);
+            color: #333333;
             font-size: 1.1rem;
             margin-bottom: 1.5rem;
             line-height: 1.6;
@@ -2533,31 +2586,65 @@
         .article-link {
             display: inline-flex;
             align-items: center;
-            color: var(--accent);
+            color: #000000;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
-        }
-
-        .article-link i {
-            margin-left: 0.5rem;
-            font-size: 1rem;
+            background: #FFD700;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
         }
 
         .article-link:hover {
-            color: var(--primary);
+            background: #FFC000;
+            color: #000000;
+            transform: translateY(-2px);
         }
 
         .pdf-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 2px solid #FFD700;
         }
 
         .pdf-card .article-link {
-            color: #e74c3c;
+            background: #FFD700;
+            color: #000000;
         }
 
         .pdf-card .article-link:hover {
-            color: #c0392b;
+            background: #FFC000;
+            color: #000000;
+        }
+
+        .medium-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 2px solid #FFD700;
+        }
+
+        .medium-card .article-link {
+            background: #FFD700;
+            color: #000000;
+        }
+
+        .medium-card .article-link:hover {
+            background: #FFC000;
+            color: #000000;
+        }
+
+        .article-stats span {
+            color: #666666;
+        }
+
+        .article-stats i {
+            color: #FFD700;
+        }
+
+        .claps i {
+            color: #FFD700;
+        }
+
+        .read-time i {
+            color: #666666;
         }
 
         @media (max-width: 768px) {
@@ -2572,7 +2659,7 @@
 
         .section-subtitle {
             font-size: 2rem;
-            color: var(--text);
+            color: #000000;
             margin-bottom: 2rem;
             text-align: center;
             position: relative;
@@ -2587,7 +2674,7 @@
             transform: translateX(-50%);
             width: 80px;
             height: 3px;
-            background: var(--primary);
+            background: #FFD700;
         }
 
         .article-stats {
@@ -2600,21 +2687,21 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--text-light);
+            color: #666666;
             font-size: 0.9rem;
         }
 
         .article-stats i {
-            color: var(--accent);
+            color: #FFD700;
         }
 
         .pdf-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border: 2px solid var(--accent);
+            border: 2px solid #FFD700;
         }
 
         .pdf-card h3 {
-            color: var(--accent);
+            color: #000000 !important;
             font-weight: 700;
         }
 
@@ -2631,11 +2718,11 @@
 
         .medium-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border: 2px solid #00ab6c;
+            border: 2px solid #FFD700;
         }
 
         .medium-card h3 {
-            color: #00ab6c;
+            color: #000000 !important;
             font-weight: 700;
         }
 
@@ -2649,20 +2736,20 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--text-light);
+            color: #666666;
             font-size: 0.9rem;
         }
 
         .article-stats i {
-            color: var(--accent);
+            color: #FFD700;
         }
 
         .claps i {
-            color: #00ab6c;
+            color: #FFD700;
         }
 
         .read-time i {
-            color: #666;
+            color: #666666;
         }
 
         @media (max-width: 768px) {
@@ -3424,7 +3511,7 @@
                 <div class="col-lg-4" data-aos="fade-right" data-aos-delay="100">
                     <div class="experience-card">
                         <div class="company-logo">
-                            <img src="asu logo.jpg" alt="Arizona State University" class="company-image">
+                            <img src="images/logos/asu%20logo.jpg" alt="Arizona State University" class="company-image">
                         </div>
                         <h3>Center for Hydrologic Innovations</h3>
                         <h4>Geospatial and Visualization Scientist (Postdoc)</h4>
@@ -3439,7 +3526,7 @@
                 <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="experience-card">
                         <div class="company-logo">
-                            <img src="planys_logo.jpeg" alt="Planys Technologies" class="company-image">
+                            <img src="images/logos/planys_logo.jpeg" alt="Planys Technologies" class="company-image">
                         </div>
                         <h3>Planys Technologies</h3>
                         <h4>Specialist - Software Engineering & Business Operations</h4>
@@ -3772,40 +3859,26 @@
             <div class="row">
                 <!-- Medium Article -->
                 <div class="col-lg-6" data-aos="fade-right">
-                    <div class="article-card">
+                    <div class="article-card medium-card">
                         <div class="article-content">
-                            <h3>My 30-Day Journey to Acing the Dutch Inburgering A2 Exam</h3>
-                            <p class="article-meta">Published on Medium</p>
-                            <p class="article-excerpt">Simple steps to success in your Dutch language journey...</p>
+                            <h3>My 30-Day Journey to Acing the Dutch Inburgering A2 Exam: Simple Steps to Success!</h3>
+                            <p class="article-meta">Published on Medium · Feb 5, 2024</p>
+                            <p class="article-excerpt">A comprehensive guide to preparing for and successfully passing the Dutch language integration exam...</p>
+                            <div class="article-stats">
+                                <span class="claps"><i class="fas fa-hands-clapping"></i> 438</span>
+                                <span class="read-time"><i class="fas fa-clock"></i> 9 min read</span>
+                            </div>
                             <a href="https://medium.com/@Dr.praddy/my-30-day-journey-to-acing-the-dutch-inburgering-a2-exam-simple-steps-to-success-e8bce3b91438" 
                                class="article-link" 
                                target="_blank">
-                                Read on Medium <i class="fas fa-external-link-alt"></i>
+                                Read on Medium <i class="fab fa-medium"></i>
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- LinkedIn Article -->
+                <!-- PDF Document -->
                 <div class="col-lg-6" data-aos="fade-left">
-                    <div class="article-card">
-                        <div class="article-content">
-                            <h3>Professional Insights</h3>
-                            <p class="article-meta">Published on LinkedIn</p>
-                            <p class="article-excerpt">Explore my latest professional articles and insights...</p>
-                            <a href="https://www.linkedin.com/in/dr-pradeepika-kaushik/recent-activity/articles/" 
-                               class="article-link" 
-                               target="_blank">
-                                View on LinkedIn <i class="fab fa-linkedin"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PDF Document -->
-            <div class="row mt-4">
-                <div class="col-lg-12" data-aos="fade-up">
                     <div class="article-card pdf-card">
                         <div class="article-content">
                             <h3>100-DAY GIS WEB DEVELOPMENT BOOTCAMP ROADMAP</h3>
@@ -3815,28 +3888,6 @@
                                class="article-link" 
                                target="_blank">
                                 View PDF <i class="fas fa-file-pdf"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Medium Article -->
-            <div class="row mt-4">
-                <div class="col-lg-12" data-aos="fade-up">
-                    <div class="article-card medium-card">
-                        <div class="article-content">
-                            <h3>My 30-Day Journey to Acing the Dutch Inburgering A2 Exam</h3>
-                            <p class="article-meta">Published on Medium</p>
-                            <p class="article-excerpt">A personal account of preparing for and successfully passing the Dutch language integration exam...</p>
-                            <div class="article-stats">
-                                <span class="claps"><i class="fas fa-hands-clapping"></i> 470+</span>
-                                <span class="read-time"><i class="fas fa-clock"></i> 5 min read</span>
-                            </div>
-                            <a href="https://medium.com/@praddykaushik/my-30-day-journey-to-acing-the-dutch-inburgering-a2-exam-1234567890" 
-                               class="article-link" 
-                               target="_blank">
-                                Read Article <i class="fab fa-medium"></i>
                             </a>
                         </div>
                     </div>
