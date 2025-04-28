@@ -767,22 +767,64 @@
         .video-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            margin-bottom: 2rem;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            background: #ffffff;
-            height: 100%;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .video-container video {
+            width: 100%;
+            display: block;
+        }
+
+        .play-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .play-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .play-overlay-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-overlay-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .play-overlay-button i {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .play-overlay-button span {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .video-controls {
@@ -3314,30 +3356,30 @@
                 </div>
                 <div class="col-lg-6" data-aos="fade-left">
                     <div class="video-container">
-                        <video id="aboutVideo" autoplay muted loop playsinline>
+                        <video id="aboutVideo" autoplay muted loop playsinline preload="auto" webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="true" style="display: block; width: 100%;" oncanplay="this.play()" onloadedmetadata="this.play()" onloadeddata="this.play()" onplay="this.muted=false">
                             <source src="ContentStudio_video.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                         <div class="video-controls">
-                            <button class="control-button" onclick="togglePlay()">
+                            <button class="control-button" id="playButton">
                                 <i class="fas fa-play"></i>
                             </button>
-                            <button class="control-button" onclick="skipBackward()">
-                                <i class="fas fa-step-backward"></i>
-                            </button>
-                            <div class="progress-bar" onclick="seek(event)">
+                            <div class="progress-bar" id="progressContainer">
                                 <div class="progress" id="progressBar"></div>
                             </div>
-                            <button class="control-button" onclick="skipForward()">
-                                <i class="fas fa-step-forward"></i>
-                            </button>
                             <div class="volume-control">
-                                <button class="control-button" onclick="toggleMute()">
+                                <button class="control-button" id="volumeButton">
                                     <i class="fas fa-volume-up" id="volumeIcon"></i>
                                 </button>
-                                <input type="range" min="0" max="100" value="100" class="volume-slider" id="volumeSlider" oninput="setVolume(this.value)">
+                                <input type="range" min="0" max="100" value="100" class="volume-slider" id="volumeSlider">
                             </div>
                             <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+                        </div>
+                        <div class="play-overlay" id="playOverlay">
+                            <button class="play-overlay-button">
+                                <i class="fas fa-play"></i>
+                                <span>Click to Play</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -4175,97 +4217,110 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="script.js"></script>
     <script>
+        // Initialize video and controls
         const video = document.getElementById('aboutVideo');
+        const playButton = document.getElementById('playButton');
+        const progressContainer = document.getElementById('progressContainer');
         const progressBar = document.getElementById('progressBar');
+        const volumeButton = document.getElementById('volumeButton');
+        const volumeIcon = document.getElementById('volumeIcon');
+        const volumeSlider = document.getElementById('volumeSlider');
         const timeDisplay = document.getElementById('timeDisplay');
-        const playButton = document.querySelector('.control-button i');
-        let isPlaying = false;
 
-        function togglePlay() {
-            if (video.paused) {
-                video.play();
-                playButton.classList.remove('fa-play');
-                playButton.classList.add('fa-pause');
-                isPlaying = true;
-            } else {
-                video.pause();
-                playButton.classList.remove('fa-pause');
-                playButton.classList.add('fa-play');
-                isPlaying = false;
-            }
-        }
-
-        function skipBackward() {
-            video.currentTime = Math.max(0, video.currentTime - 10);
-        }
-
-        function skipForward() {
-            video.currentTime = Math.min(video.duration, video.currentTime + 10);
-        }
-
-        function seek(event) {
-            const rect = event.target.getBoundingClientRect();
-            const pos = (event.clientX - rect.left) / rect.width;
-            video.currentTime = pos * video.duration;
-        }
-
-        function updateProgress() {
-            const progress = (video.currentTime / video.duration) * 100;
-            progressBar.style.width = `${progress}%`;
-            
-            const currentTime = formatTime(video.currentTime);
-            const duration = formatTime(video.duration);
-            timeDisplay.textContent = `${currentTime} / ${duration}`;
-        }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            seconds = Math.floor(seconds % 60);
-            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        video.addEventListener('timeupdate', updateProgress);
-        video.addEventListener('loadedmetadata', updateProgress);
-
-        // Add volume control functions
-        function toggleMute() {
-            const video = document.getElementById('aboutVideo');
-            const volumeIcon = document.getElementById('volumeIcon');
-            const volumeSlider = document.getElementById('volumeSlider');
-            
-            if (video.muted) {
-                video.muted = false;
-                volumeIcon.classList.remove('fa-volume-mute');
-                volumeIcon.classList.add('fa-volume-up');
-                volumeSlider.value = video.volume * 100;
-            } else {
-                video.muted = true;
-                volumeIcon.classList.remove('fa-volume-up');
-                volumeIcon.classList.add('fa-volume-mute');
-            }
-        }
-
-        function setVolume(value) {
-            const video = document.getElementById('aboutVideo');
-            const volumeIcon = document.getElementById('volumeIcon');
-            
-            video.volume = value / 100;
+        if (video && playButton && progressContainer && progressBar && volumeButton && volumeIcon && volumeSlider && timeDisplay) {
+            // Set initial volume
+            video.volume = 1;
             video.muted = false;
-            
-            if (value == 0) {
-                volumeIcon.classList.remove('fa-volume-up');
-                volumeIcon.classList.add('fa-volume-mute');
-            } else if (value < 50) {
-                volumeIcon.classList.remove('fa-volume-mute', 'fa-volume-up');
-                volumeIcon.classList.add('fa-volume-down');
-            } else {
-                volumeIcon.classList.remove('fa-volume-mute', 'fa-volume-down');
-                volumeIcon.classList.add('fa-volume-up');
-            }
-        }
 
-        // Initialize video volume
-        document.getElementById('aboutVideo').volume = 1; // Set initial volume to 100%
+            // Play/Pause functionality
+            playButton.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                    playButton.querySelector('i').classList.remove('fa-play');
+                    playButton.querySelector('i').classList.add('fa-pause');
+                } else {
+                    video.pause();
+                    playButton.querySelector('i').classList.remove('fa-pause');
+                    playButton.querySelector('i').classList.add('fa-play');
+                }
+            });
+
+            // Progress bar
+            video.addEventListener('timeupdate', () => {
+                const progress = (video.currentTime / video.duration) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                const currentMinutes = Math.floor(video.currentTime / 60);
+                const currentSeconds = Math.floor(video.currentTime % 60);
+                const durationMinutes = Math.floor(video.duration / 60);
+                const durationSeconds = Math.floor(video.duration % 60);
+                
+                timeDisplay.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')} / ${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+            });
+
+            // Click on progress bar to seek
+            progressContainer.addEventListener('click', (e) => {
+                const rect = progressContainer.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                video.currentTime = pos * video.duration;
+            });
+
+            // Volume control
+            volumeSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                video.volume = value / 100;
+                video.muted = false;
+                
+                if (value == 0) {
+                    volumeIcon.classList.remove('fa-volume-up');
+                    volumeIcon.classList.add('fa-volume-mute');
+                } else if (value < 50) {
+                    volumeIcon.classList.remove('fa-volume-mute', 'fa-volume-up');
+                    volumeIcon.classList.add('fa-volume-down');
+                } else {
+                    volumeIcon.classList.remove('fa-volume-mute', 'fa-volume-down');
+                    volumeIcon.classList.add('fa-volume-up');
+                }
+            });
+
+            // Mute/Unmute
+            volumeButton.addEventListener('click', () => {
+                if (video.volume > 0) {
+                    video.volume = 0;
+                    volumeSlider.value = 0;
+                    volumeIcon.classList.remove('fa-volume-up');
+                    volumeIcon.classList.add('fa-volume-mute');
+                } else {
+                    video.volume = 1;
+                    volumeSlider.value = 100;
+                    volumeIcon.classList.remove('fa-volume-mute');
+                    volumeIcon.classList.add('fa-volume-up');
+                }
+            });
+
+            // Try to play video
+            const playVideo = () => {
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        playButton.querySelector('i').classList.remove('fa-play');
+                        playButton.querySelector('i').classList.add('fa-pause');
+                    }).catch(error => {
+                        console.log("Autoplay prevented:", error);
+                    });
+                }
+            };
+
+            // Try to play on various events
+            window.addEventListener('load', playVideo);
+            document.addEventListener('click', playVideo, { once: true });
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    playVideo();
+                }
+            });
+            setTimeout(playVideo, 1000);
+        }
     </script>
 </body>
 </html> 

@@ -347,12 +347,156 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Add click event to all museum items
-        document.querySelectorAll('.museum-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const museumName = this.querySelector('h4').textContent;
-                openMuseumModal(museumName);
+        const museumItems = document.querySelectorAll('.museum-item');
+        if (museumItems && museumItems.length > 0) {
+            museumItems.forEach(item => {
+                if (item) {
+                    item.addEventListener('click', function() {
+                        const museumName = this.querySelector('h4');
+                        if (museumName) {
+                            openMuseumModal(museumName.textContent);
+                        }
+                    });
+                }
             });
-        });
+        }
+
+        // Video Controls
+        const videoContainer = document.querySelector('.video-container');
+        if (videoContainer) {
+            const video = videoContainer.querySelector('video');
+            const playBtn = videoContainer.querySelector('.play-btn');
+            const progressBar = videoContainer.querySelector('.progress-bar');
+            const progressContainer = videoContainer.querySelector('.progress-container');
+            const timeDisplay = videoContainer.querySelector('.time-display');
+            const volumeBtn = videoContainer.querySelector('.volume-btn');
+            const volumeIcon = videoContainer.querySelector('#volumeIcon');
+            const volumeSlider = videoContainer.querySelector('.volume-slider');
+            const speedBtn = videoContainer.querySelector('.speed-btn');
+            const speedText = videoContainer.querySelector('.speed-text');
+
+            if (video) {
+                // Force video to start playing immediately
+                const playVideo = () => {
+                    if (video.paused) {
+                        video.play().then(() => {
+                            console.log("Video started playing");
+                            // Unmute immediately
+                            video.muted = false;
+                            if (volumeIcon) {
+                                volumeIcon.classList.remove('fa-volume-mute');
+                                volumeIcon.classList.add('fa-volume-up');
+                            }
+                            if (volumeSlider) {
+                                volumeSlider.value = 100;
+                            }
+                        }).catch(error => {
+                            console.log("Playback failed:", error);
+                            // Try again immediately
+                            setTimeout(playVideo, 50);
+                        });
+                    }
+                };
+
+                // Try to play immediately
+                playVideo();
+
+                // Also try to play on various events
+                const events = ['loadedmetadata', 'canplay', 'loadeddata', 'play', 'playing', 'progress'];
+                events.forEach(event => {
+                    video.addEventListener(event, playVideo);
+                });
+
+                // Try on user interaction events
+                const userEvents = ['click', 'scroll', 'mousemove', 'keydown', 'touchstart', 'pointerdown'];
+                userEvents.forEach(event => {
+                    document.addEventListener(event, playVideo, { once: true });
+                });
+
+                // Play/Pause
+                if (playBtn) {
+                    playBtn.addEventListener('click', () => {
+                        if (video.paused) {
+                            playVideo();
+                            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        } else {
+                            video.pause();
+                            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                        }
+                    });
+                }
+
+                // Progress Bar
+                if (progressBar && progressContainer) {
+                    video.addEventListener('timeupdate', () => {
+                        const progress = (video.currentTime / video.duration) * 100;
+                        progressBar.style.width = `${progress}%`;
+                        
+                        if (timeDisplay) {
+                            const currentMinutes = Math.floor(video.currentTime / 60);
+                            const currentSeconds = Math.floor(video.currentTime % 60);
+                            const durationMinutes = Math.floor(video.duration / 60);
+                            const durationSeconds = Math.floor(video.duration % 60);
+                            
+                            timeDisplay.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')} / ${durationMinutes}:${durationSeconds.toString().padStart(2, '0')}`;
+                        }
+                    });
+
+                    progressContainer.addEventListener('click', (e) => {
+                        const rect = progressContainer.getBoundingClientRect();
+                        const pos = (e.clientX - rect.left) / rect.width;
+                        video.currentTime = pos * video.duration;
+                    });
+                }
+
+                // Volume Control
+                if (volumeSlider && volumeBtn) {
+                    volumeSlider.addEventListener('input', (e) => {
+                        video.volume = e.target.value;
+                        updateVolumeIcon();
+                    });
+
+                    function updateVolumeIcon() {
+                        if (video.volume === 0) {
+                            volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                        } else if (video.volume < 0.5) {
+                            volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+                        } else {
+                            volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                        }
+                    }
+
+                    volumeBtn.addEventListener('click', () => {
+                        if (video.volume > 0) {
+                            video.volume = 0;
+                            volumeSlider.value = 0;
+                        } else {
+                            video.volume = 1;
+                            volumeSlider.value = 1;
+                        }
+                        updateVolumeIcon();
+                    });
+                }
+
+                // Playback Speed
+                if (speedBtn && speedText) {
+                    const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
+                    let speedIndex = 2; // Start at 1x speed
+
+                    speedBtn.addEventListener('click', () => {
+                        speedIndex = (speedIndex + 1) % speeds.length;
+                        video.playbackRate = speeds[speedIndex];
+                        speedText.textContent = `${speeds[speedIndex]}x`;
+                    });
+                }
+
+                // Initialize
+                video.volume = 0.5;
+                if (volumeSlider) volumeSlider.value = 0.5;
+                if (volumeBtn) updateVolumeIcon();
+                if (speedText) speedText.textContent = '1x';
+            }
+        }
     } catch (error) {
         console.error('Error initializing scripts:', error);
     }
